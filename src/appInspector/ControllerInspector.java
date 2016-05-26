@@ -27,6 +27,7 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -120,5 +121,23 @@ public class ControllerInspector {
 		utilsTools.printDebug("Tree->Add Project");
 //		boolean okClicked = mainApp.showDiscoveryBroker();
     }
-   
+
+    @FXML void handleMenuDocbroker() throws Throwable {
+		utilsTools.printDebug("Menu->Show Docbroker");
+		showWindow("Hello");
+		
+    }
+    
+    private void showWindow(String message) throws IOException {
+        final FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/Dialog.fxml"));
+        loader.setController(new ControllerDialog(message));
+        final Parent root = loader.load();
+        final Scene scene = new Scene(root, 250, 150);
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        stage.setScene(scene);
+        stage.show();
+    }
 }

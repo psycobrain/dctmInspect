@@ -18,7 +18,7 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Tools">
               <items>
-                <MenuItem fx:id="mnuToolDiscovery" mnemonicParsing="false"  text="Discovery Docbroker ..." />
+                <MenuItem mnemonicParsing="false" onAction="#handleMenuDocbroker" text="Discovery Docbroker ..." />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
