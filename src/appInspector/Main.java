@@ -1,4 +1,4 @@
-package appDemoFX;
+package appInspector;
 	
 import java.awt.Label;
 import java.io.IOException;
@@ -6,17 +6,19 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 
 
 public class Main extends Application {
-	Stage mainStage;
+	static Stage mainStage;
 	
 	static public boolean flag = true;
 	
@@ -39,7 +41,7 @@ public class Main extends Application {
 
 	@Override public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("DemoFX.fxml"));
+			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("ui/Inspector.fxml"));
 			Scene scene = new Scene(root);
 			mainStage = primaryStage;
 			
@@ -54,35 +56,6 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-	public boolean showDiscoveryBroker() {
-		try {
-	        // Load the fxml file and create a new stage for the popup dialog.
-	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(Main.class.getResource("DiscoveryBroker.fxml"));
-	        AnchorPane page = (AnchorPane) loader.load();
 
-	        // Create the dialog Stage.
-	        Stage dialogStage = new Stage();
-	        dialogStage.setTitle("Edit Person");
-	        dialogStage.initModality(Modality.WINDOW_MODAL);
-	        dialogStage.initOwner(mainStage);
-	        Scene scene = new Scene(page);
-	        dialogStage.setScene(scene);
 
-	        // Set the person into the controller.
-	        ControllerDiscoveryBroker controller = loader.getController();
-	        controller.setDialogStage(dialogStage);
-	        controller.setPerson();
-
-	        // Show the dialog and wait until the user closes it
-	        dialogStage.showAndWait();
-
-	        return controller.isOkClicked();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-		
-	}
 }

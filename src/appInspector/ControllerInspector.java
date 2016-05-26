@@ -1,4 +1,4 @@
-package appDemoFX;
+package appInspector;
 
 
 import java.awt.MenuBar;
@@ -7,9 +7,13 @@ import java.io.IOException;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -19,10 +23,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBoxBuilder;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class DemoFXController {
+public class ControllerInspector {
 
     // Reference to the main application
     private Main mainApp;
@@ -37,6 +45,7 @@ public class DemoFXController {
 
     Image iconProject = new Image (getClass().getResourceAsStream("images/logo_16.gif"));
     Image iconEnv = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
+    Image iconDocbase = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
 
     
     public void initialize()
@@ -93,12 +102,9 @@ public class DemoFXController {
     	alert.showAndWait();
     }
     
-	@FXML public void handleDiscovery() {
-		utilsTools.printDebug("Tools->Discovery Docbroker");
-	}
-	
 	@FXML public void treeViewMouseClick(MouseEvent mouseEvent)
 	{
+		System.out.println(mouseEvent.toString());
 		  if (mouseEvent.getClickCount() == 2) {
 			  TreeItem<String> item = treeViewProject.getSelectionModel().getSelectedItem();
 			  utilsTools.printDebug("treeViewMouseClick:"+item.getValue());
@@ -112,7 +118,7 @@ public class DemoFXController {
     @FXML void mnuPopupAddProject()
     {
 		utilsTools.printDebug("Tree->Add Project");
-		boolean okClicked = mainApp.showDiscoveryBroker();
+//		boolean okClicked = mainApp.showDiscoveryBroker();
     }
    
 }
