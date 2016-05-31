@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseButton;
@@ -43,7 +44,10 @@ public class ControllerInspector {
     public MenuItem mnuToolDiscovery;
     public TreeView<String> treeViewProject;
     public ContextMenu treeMenuPopup;
+    public TextArea txtComment;
 
+    enum idTree { PROJECT, ENV, REPO };
+    
     Image iconProject = new Image (getClass().getResourceAsStream("images/logo_16.gif"));
     Image iconEnv = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
     Image iconDocbase = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
@@ -51,7 +55,43 @@ public class ControllerInspector {
     
     public void initialize()
     {
-    	loadTreeItems("node 1", "node 2", "node 3");
+//    	loadTreeItems("node 1", "node 2", "node 3");
+        Tree tree = new Tree();
+        /*
+         * The second parameter for the addNode method is the identifier
+         * for the node's parent. In the case of the root node, either
+         * null is provided or no second parameter is provided.
+         */
+//        tree.addRootTree(root);
+        tree.addNode("Root", 0);
+        tree.addNode("ISP", "Root", 1);
+        tree.addNode("Sviluppo", "ISP", 2);
+        tree.addNode("System", "ISP", 2);
+        tree.addNode("Produzione",  "ISP", 2);
+        tree.addNode("sal", "Sviluppo", 3);
+        
+    	TreeItem<String> root= new TreeItem<String>("Root");
+    	root.setExpanded(true);
+
+/*
+       	TreeItem<String> rootProject= new TreeItem<String>("Projects",new ImageView(iconProject));
+       	TreeItem<String> rootEnv= new TreeItem<String>("Env",new ImageView(iconEnv));
+    	root.getChildren().add(rootProject);
+    	rootProject.getChildren().add(rootEnv);
+*/    	
+       tree.toTree("Root", root);
+        
+       	treeViewProject.setRoot(root);	
+       	
+
+
+
+ 
+        tree.display("Root", txtComment);
+
+        
+
+    	
     }
 
     public void loadTreeItems(String... rootItems)
@@ -61,17 +101,20 @@ public class ControllerInspector {
        	TreeItem<String> rootProject= new TreeItem<String>("Projects",new ImageView(iconProject));
        	TreeItem<String> rootEnv= new TreeItem<String>("Env",new ImageView(iconEnv));
        	
+
+       	
     	root.setExpanded(true);
     	
     	root.getChildren().add(rootProject);
     	rootProject.getChildren().add(rootEnv);
-    	
+
 /*
     	for (String itemString: rootItems) {
     		root.getChildren().add(new TreeItem<String>(itemString, new ImageView(iconProject)));
     	}
 */
        	treeViewProject.setRoot(root);	
+
 }
     
     /**
@@ -81,6 +124,7 @@ public class ControllerInspector {
      */
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
+
     }
 
 
@@ -106,19 +150,19 @@ public class ControllerInspector {
 	@FXML public void treeViewMouseClick(MouseEvent mouseEvent)
 	{
 		System.out.println(mouseEvent.toString());
-		  if (mouseEvent.getClickCount() == 2) {
-			  TreeItem<String> item = treeViewProject.getSelectionModel().getSelectedItem();
-			  utilsTools.printDebug("treeViewMouseClick:"+item.getValue());
-		  }
+		System.out.println(mouseEvent);
+
 	}
-	
+
+
     @FXML void onMouseMove(MouseEvent event) {
 //    	System.out.println("Mouse move X:"+event.getX()+" Y:"+event.getY());
     }
     
-    @FXML void mnuPopupAddProject()
+    @FXML void mnuPopupAddProject(MouseEvent event)
     {
-		utilsTools.printDebug("Tree->Add Project");
+    	if (event.isSecondaryButtonDown())
+    		utilsTools.printDebug("Tree->Add Project");
 //		boolean okClicked = mainApp.showDiscoveryBroker();
     }
 

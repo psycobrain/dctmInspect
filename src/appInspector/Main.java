@@ -3,11 +3,14 @@ package appInspector;
 import java.awt.Label;
 import java.io.IOException;
 
+import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
+
 import javafx.application.Application;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.AnchorPane;
@@ -25,6 +28,7 @@ public class Main extends Application {
     public String codeName = "DemoFX";
 	public String codeVersion = "0.01a";
     public Label lblMsg;
+
     
 	public void handle(final MouseEvent event) {
 
