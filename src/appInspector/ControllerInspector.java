@@ -56,66 +56,32 @@ public class ControllerInspector {
     public void initialize()
     {
 //    	loadTreeItems("node 1", "node 2", "node 3");
-        Tree tree = new Tree();
-        /*
-         * The second parameter for the addNode method is the identifier
-         * for the node's parent. In the case of the root node, either
-         * null is provided or no second parameter is provided.
-         */
-//        tree.addRootTree(root);
-        tree.addNode("Root", 0);
-        tree.addNode("ISP", "Root", 1);
-        tree.addNode("Sviluppo", "ISP", 2);
-        tree.addNode("System", "ISP", 2);
-        tree.addNode("Produzione",  "ISP", 2);
-        tree.addNode("sal", "Sviluppo", 3);
-        
+       
     	TreeItem<String> root= new TreeItem<String>("Root");
     	root.setExpanded(true);
 
-/*
        	TreeItem<String> rootProject= new TreeItem<String>("Projects",new ImageView(iconProject));
        	TreeItem<String> rootEnv= new TreeItem<String>("Env",new ImageView(iconEnv));
     	root.getChildren().add(rootProject);
     	rootProject.getChildren().add(rootEnv);
-*/    	
-       tree.toTree("Root", root);
-        
+
        	treeViewProject.setRoot(root);	
-       	
+     }
 
 
-
- 
-        tree.display("Root", txtComment);
-
-        
-
-    	
-    }
-
-    public void loadTreeItems(String... rootItems)
+	private int getDepth(TreeItem node)
     {
-
-    	TreeItem<String> root= new TreeItem<String>("Root");
-       	TreeItem<String> rootProject= new TreeItem<String>("Projects",new ImageView(iconProject));
-       	TreeItem<String> rootEnv= new TreeItem<String>("Env",new ImageView(iconEnv));
-       	
-
-       	
-    	root.setExpanded(true);
+    	int depth = -1;
     	
-    	root.getChildren().add(rootProject);
-    	rootProject.getChildren().add(rootEnv);
-
-/*
-    	for (String itemString: rootItems) {
-    		root.getChildren().add(new TreeItem<String>(itemString, new ImageView(iconProject)));
+    	if (node.isLeaf())
+    		depth = 0;
+    	else
+    	{
+    		
     	}
-*/
-       	treeViewProject.setRoot(root);	
-
-}
+    	return depth;
+ 	
+    }
     
     /**
      * Is called by the main application to give a reference back to itself.
@@ -149,9 +115,16 @@ public class ControllerInspector {
     
 	@FXML public void treeViewMouseClick(MouseEvent mouseEvent)
 	{
-		System.out.println(mouseEvent.toString());
-		System.out.println(mouseEvent);
 
+		
+		if (mouseEvent.isPopupTrigger()) {
+			TreeView jtree = (TreeView)mouseEvent.getSource();
+
+			
+			System.out.println("treeViewMouseClick:"+mouseEvent.toString());
+			System.out.println(jtree.getSelectionModel().selectedItemProperty());
+			
+		}
 	}
 
 

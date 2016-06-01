@@ -1,4 +1,4 @@
-package appInspector;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,7 +107,7 @@ public class Tree {
     		System.out.println("sub:"+level);
     	}
     	level++;
-    	for (String sub, figlio)
+
 
     }
 
