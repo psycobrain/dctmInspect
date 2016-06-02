@@ -37,6 +37,7 @@ public class ControllerInspector {
     // Reference to the main application
     private Main mainApp;
     private Utils utilsTools;
+    private Object nodeTree;
     
  // Value injected by FXMLLoader
 //    public MenuBar mnuBar;
@@ -46,8 +47,7 @@ public class ControllerInspector {
     public ContextMenu treeMenuPopup;
     public TextArea txtComment;
 
-    enum idTree { PROJECT, ENV, REPO };
-    
+  
     Image iconProject = new Image (getClass().getResourceAsStream("images/logo_16.gif"));
     Image iconEnv = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
     Image iconDocbase = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
@@ -55,34 +55,28 @@ public class ControllerInspector {
     
     public void initialize()
     {
-//    	loadTreeItems("node 1", "node 2", "node 3");
-       
-    	TreeItem<String> root= new TreeItem<String>("Root");
+    	Nodes root= new Nodes("Root");
     	root.setExpanded(true);
 
-       	TreeItem<String> rootProject= new TreeItem<String>("Projects",new ImageView(iconProject));
-       	TreeItem<String> rootEnv= new TreeItem<String>("Env",new ImageView(iconEnv));
-    	root.getChildren().add(rootProject);
+       	Nodes rootProject= new Nodes("Projects",new ImageView(iconProject));
+       	Nodes rootEnv= new Nodes("Env",new ImageView(iconEnv));
+       	
+       	System.out.println(rootProject.getDepth());
+       	System.out.println(rootEnv.getDepth());
+
+/*
+    	TreeItem root= new TreeItem("Root");
+    	root.setExpanded(true);
+
+       	TreeItem rootProject= new TreeItem("Projects",new ImageView(iconProject));
+       	TreeItem rootEnv= new TreeItem("Env",new ImageView(iconEnv));
+*/
+       	root.getChildren().add(rootProject);
     	rootProject.getChildren().add(rootEnv);
 
        	treeViewProject.setRoot(root);	
      }
 
-
-	private int getDepth(TreeItem node)
-    {
-    	int depth = -1;
-    	
-    	if (node.isLeaf())
-    		depth = 0;
-    	else
-    	{
-    		
-    	}
-    	return depth;
- 	
-    }
-    
     /**
      * Is called by the main application to give a reference back to itself.
      * 
@@ -106,7 +100,7 @@ public class ControllerInspector {
     	utilsTools.printDebug("About Dialog");
     	Alert alert = new Alert(AlertType.INFORMATION);
     	alert.setTitle("Information Dialog");
-    	alert.setHeaderText(null);
+ 
     	alert.setHeaderText(mainApp.codeName+" "+mainApp.codeVersion);
     	alert.setContentText("Inspector for ECM Documentum");
 
@@ -115,16 +109,11 @@ public class ControllerInspector {
     
 	@FXML public void treeViewMouseClick(MouseEvent mouseEvent)
 	{
+		System.out.println("treeViewMouseClick:"+mouseEvent.toString());
 
-		
-		if (mouseEvent.isPopupTrigger()) {
-			TreeView jtree = (TreeView)mouseEvent.getSource();
-
-			
-			System.out.println("treeViewMouseClick:"+mouseEvent.toString());
-			System.out.println(jtree.getSelectionModel().selectedItemProperty());
-			
-		}
+		TreeView jtree = (TreeView)mouseEvent.getSource();
+		nodeTree = jtree.getSelectionModel().getSelectedItem();
+		System.out.println(nodeTree.toString());
 	}
 
 
@@ -132,10 +121,10 @@ public class ControllerInspector {
 //    	System.out.println("Mouse move X:"+event.getX()+" Y:"+event.getY());
     }
     
-    @FXML void mnuPopupAddProject(MouseEvent event)
+    @FXML void mnuPopupAddProject()
     {
-    	if (event.isSecondaryButtonDown())
-    		utilsTools.printDebug("Tree->Add Project");
+   		utilsTools.printDebug("Tree->Add Project");
+   		System.out.println(nodeTree.toString());
 //		boolean okClicked = mainApp.showDiscoveryBroker();
     }
 
