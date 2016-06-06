@@ -28,6 +28,11 @@ public class Main extends Application {
     public String codeName = "DemoFX";
 	public String codeVersion = "0.01a";
     public Label lblMsg;
+    
+    public static int	NODE_TYPE_ROOT = 1;
+    public static int	NODE_TYPE_PROJECT = 2;
+    public static  int	NODE_TYPE_ENV = 3;
+    public static int	NODE_TYPE_DOCBASE = 4;
 
     
 	public void handle(final MouseEvent event) {

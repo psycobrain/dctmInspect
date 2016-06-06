@@ -37,29 +37,24 @@ public class ControllerInspector {
     // Reference to the main application
     private Main mainApp;
     private Utils utilsTools;
-    private Object nodeTree;
+    private Nodes nodeTree;
     
  // Value injected by FXMLLoader
 //    public MenuBar mnuBar;
     public MenuItem mnuFileExit;
     public MenuItem mnuToolDiscovery;
+    public MenuItem mnuPopupAdd;
     public TreeView<String> treeViewProject;
     public ContextMenu treeMenuPopup;
     public TextArea txtComment;
 
-  
-    Image iconProject = new Image (getClass().getResourceAsStream("images/logo_16.gif"));
-    Image iconEnv = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
-    Image iconDocbase = new Image (getClass().getResourceAsStream("images/type/t_dm_folder_open_16.gif"));
-
-    
     public void initialize()
     {
     	Nodes root= new Nodes("Root");
     	root.setExpanded(true);
 
-       	Nodes rootProject= new Nodes("Projects",new ImageView(iconProject));
-       	Nodes rootEnv= new Nodes("Env",new ImageView(iconEnv));
+       	Nodes rootProject= new Nodes("Projects",mainApp.NODE_TYPE_PROJECT);
+       	Nodes rootEnv= new Nodes("Env", mainApp.NODE_TYPE_ENV);
        	
        	System.out.println(rootProject.getDepth());
        	System.out.println(rootEnv.getDepth());
@@ -109,21 +104,32 @@ public class ControllerInspector {
     
 	@FXML public void treeViewMouseClick(MouseEvent mouseEvent)
 	{
-		System.out.println("treeViewMouseClick:"+mouseEvent.toString());
-
+		int depth;
+		String label = null;
+		
+//		System.out.println("treeViewMouseClick:"+mouseEvent.toString());
 		TreeView jtree = (TreeView)mouseEvent.getSource();
-		nodeTree = jtree.getSelectionModel().getSelectedItem();
-		System.out.println(nodeTree.toString());
+		nodeTree = (Nodes)jtree.getSelectionModel().getSelectedItem();
+
+//		System.out.println("nodeTree:"+nodeTree.getDepth());
+		depth = nodeTree.getDepth();
+		label = ""+depth;
+		
+		if (depth == Main.NODE_TYPE_ROOT) label = "Project";
+		if (depth == Main.NODE_TYPE_PROJECT) label = "Env";
+		if (depth == Main.NODE_TYPE_ENV) label = "Docbase";
+	
+		mnuPopupAdd.setText("Add "+label);
 	}
 
 
     @FXML void onMouseMove(MouseEvent event) {
 //    	System.out.println("Mouse move X:"+event.getX()+" Y:"+event.getY());
     }
-    
-    @FXML void mnuPopupAddProject()
+
+    @FXML void mnuPopupAddProjectAction()
     {
-   		utilsTools.printDebug("Tree->Add Project");
+   		utilsTools.printDebug("Tree->Add Project Action");
    		System.out.println(nodeTree.toString());
 //		boolean okClicked = mainApp.showDiscoveryBroker();
     }

@@ -42,7 +42,7 @@
          <contextMenu>
             <ContextMenu fx:id="treeMenuPopup">
               <items>
-                <MenuItem mnemonicParsing="false" onAction="#mnuPopupAddProject" onMenuValidation="#mnuPopupAddProject" text="Add Project" />
+                <MenuItem fx:id="mnuPopupAdd" mnemonicParsing="false" onAction="#mnuPopupAddProjectAction" text="Add Project" />
               </items>
             </ContextMenu>
          </contextMenu></TreeView>
