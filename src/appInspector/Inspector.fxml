@@ -38,13 +38,6 @@
       </Label>
    </bottom>
    <left>
-      <TreeView fx:id="treeViewProject" onMouseClicked="#treeViewMouseClick" BorderPane.alignment="CENTER">
-         <contextMenu>
-            <ContextMenu fx:id="treeMenuPopup">
-              <items>
-                <MenuItem fx:id="mnuPopupAdd" mnemonicParsing="false" onAction="#mnuPopupAddProjectAction" text="Add Project" />
-              </items>
-            </ContextMenu>
-         </contextMenu></TreeView>
+      <TreeView fx:id="treeViewProject" editable="true" onEditCancel="#handleTreeEditCancel" onEditCommit="#handleTreeEditCommit" onEditStart="#handleTreeEditStart" onMouseClicked="#treeViewMouseClick" BorderPane.alignment="CENTER" />
    </left>
 </BorderPane>

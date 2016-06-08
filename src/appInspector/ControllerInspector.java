@@ -55,21 +55,12 @@ public class ControllerInspector {
 
        	Nodes rootProject= new Nodes("Projects",mainApp.NODE_TYPE_PROJECT);
        	Nodes rootEnv= new Nodes("Env", mainApp.NODE_TYPE_ENV);
-       	
-       	System.out.println(rootProject.getDepth());
-       	System.out.println(rootEnv.getDepth());
 
-/*
-    	TreeItem root= new TreeItem("Root");
-    	root.setExpanded(true);
-
-       	TreeItem rootProject= new TreeItem("Projects",new ImageView(iconProject));
-       	TreeItem rootEnv= new TreeItem("Env",new ImageView(iconEnv));
-*/
        	root.getChildren().add(rootProject);
     	rootProject.getChildren().add(rootEnv);
 
        	treeViewProject.setRoot(root);	
+       	treeViewProject.setCellFactory(null);
      }
 
     /**
@@ -79,7 +70,6 @@ public class ControllerInspector {
      */
     public void setMainApp(Main mainApp) {
         this.mainApp = mainApp;
-
     }
 
 
@@ -119,7 +109,7 @@ public class ControllerInspector {
 		if (depth == Main.NODE_TYPE_PROJECT) label = "Env";
 		if (depth == Main.NODE_TYPE_ENV) label = "Docbase";
 	
-		mnuPopupAdd.setText("Add "+label);
+//		mnuPopupAdd.setText("Add "+label);
 	}
 
 
@@ -139,6 +129,22 @@ public class ControllerInspector {
 		showWindow("Hello");
 		
     }
+    
+    @FXML void handleTreeEditStart()
+    {
+   		utilsTools.printDebug("Tree->Edit Start");
+    }
+
+    @FXML void handleTreeEditCommit()
+    {
+   		utilsTools.printDebug("Tree->Edit Commit");
+    }
+    
+    @FXML void handleTreeEditCancel()
+    {
+   		utilsTools.printDebug("Tree->Edit Cancel");
+    }
+    
     
     private void showWindow(String message) throws IOException {
         final FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/Dialog.fxml"));
