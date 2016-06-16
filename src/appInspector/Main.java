@@ -36,13 +36,13 @@ public class Main extends Application {
 
     
 	public void handle(final MouseEvent event) {
-
+		System.out.println("handle");
 		// do nothing for a right-click
 		if (event.isSecondaryButtonDown()) {
 			return;
 		}
 
-		System.out.println("Ciao");
+
 		// store position of initial click
 //		selectionRectangleStart = computeRectanglePoint(event.getX(), event.getY());
 		event.consume();

@@ -20,6 +20,13 @@ public class Utils {
 			System.out.println(msg);
 	}
 	
-
+	static public String getDepth(int value) {
+		String label = "";
+		if (value == Main.NODE_TYPE_ROOT) label = "Root";
+		if (value == Main.NODE_TYPE_PROJECT) label = "Project";
+		if (value == Main.NODE_TYPE_ENV) label = "Env";
+		if (value == Main.NODE_TYPE_DOCBASE) label = "Docbase";
+		return label;
+	}
 
 }
