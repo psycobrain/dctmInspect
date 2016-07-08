@@ -40,14 +40,6 @@
       </Label>
    </bottom>
    <left>
-      <TreeView fx:id="treeViewProject" editable="true" onEditCancel="#handleTreeEditCancel" onEditCommit="#handleTreeEditCommit" onEditStart="#handleTreeEditStart" onMouseClicked="#treeViewMouseClick" BorderPane.alignment="CENTER">
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem fx:id="treeMenuCxtAdd" mnemonicParsing="false" onAction="#handleTreeEditStart" text="Add Item" />
-                  <MenuItem fx:id="treeMenuCxtDel" mnemonicParsing="false" onAction="#handleTreeEditCancel" text="Remove Item" />
-              </items>
-            </ContextMenu>
-         </contextMenu></TreeView>
+      <TreeView fx:id="treeViewProject" editable="true" onMouseClicked="#treeViewMouseClick" BorderPane.alignment="CENTER" />
    </left>
 </BorderPane>

@@ -33,7 +33,8 @@ public class Main extends Application {
     public static int	NODE_TYPE_PROJECT = 2;
     public static  int	NODE_TYPE_ENV = 3;
     public static int	NODE_TYPE_DOCBASE = 4;
-
+    
+    private DctmPreferences myPrefs;
     
 	public void handle(final MouseEvent event) {
 		System.out.println("handle");
@@ -60,6 +61,7 @@ public class Main extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		myPrefs.loadPref();
 	}
 	
 	public static void main(String[] args) {

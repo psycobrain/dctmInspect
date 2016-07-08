@@ -2,9 +2,15 @@ package appInspector;
 
 
 import java.awt.MenuBar;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,7 +24,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ContextMenuBuilder;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.MenuItemBuilder;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
@@ -35,6 +43,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,7 +53,9 @@ public class ControllerInspector {
     // Reference to the main application
     private Main mainApp;
     private Utils utilsTools;
+    private DctmPreferences dctmPrefs;
     private Nodes nodeTree;
+    
     
  // Value injected by FXMLLoader
 //    public MenuBar mnuBar;
@@ -59,7 +70,7 @@ public class ControllerInspector {
 	public int depth;
 	public String label = "";
 	
-       public void initialize()
+    public void initialize()
     {
     	Nodes root= new Nodes("Root", mainApp.NODE_TYPE_ROOT);
     	root.setExpanded(true);
@@ -72,14 +83,14 @@ public class ControllerInspector {
 
        	treeViewProject.setRoot(root);
        	treeViewProject.setEditable(true);
-       	/*
+       	
         treeViewProject.setCellFactory(new Callback<TreeView<String>,TreeCell<String>>(){
             @Override
             public TreeCell<String> call(TreeView<String> p) {
                 return new TextFieldTreeCellImpl();
             }
         });
-       	*/
+
      }
 
     /**
@@ -93,9 +104,13 @@ public class ControllerInspector {
 
     /**
      * Menu Actions.
+     * @throws Exception 
+     * @throws IOException 
      */
-	@FXML public void handleExit() {
+	@FXML public void handleExit() throws Exception {
+		utilsTools.savePreferences("prefs.xml");
     	utilsTools.printDebug("Exit");
+    	dctmPrefs.savePref();
         System.exit(0);
     }
     
@@ -107,16 +122,12 @@ public class ControllerInspector {
 	
 	private void printTree(Nodes sub) {
 		ObservableList<Nodes> list = sub.getChildren();
-		String tabs ="";
-		
-		for(int i=0; i<sub.getDepth(); i++)
-			tabs = tabs+"- ";
 		
 		System.out.println(sub.getDepth()+" "+sub.getValue());
 		
 		for(Nodes child: list){
             if(child.getChildren().isEmpty()){
-                System.out.println(sub.getDepth()+" "+child.getValue());
+                System.out.println(child.getDepth()+" "+child.getValue());
             } else {
                 printTree(child);
             }
@@ -146,18 +157,9 @@ public class ControllerInspector {
 		depth = nodeTree.getDepth();
 		label = utilsTools.getDepth(depth);
 		
-   		utilsTools.printDebug("Tree->treeViewMouseClick Depth:"+depth+" Label:"+label);
+   		utilsTools.printDebug("Tree->treeViewMouseClick Depth:"+depth+" Label:"+label+" Button:"+mouseEvent.getButton());
    		
-   		if (depth == mainApp.NODE_TYPE_DOCBASE)
-   			treeMenuCxtAdd.setDisable(true);
-   		else
-   			treeMenuCxtAdd.setDisable(false);
-   			
-   		if (!nodeTree.isLeaf())
-   			treeMenuCxtDel.setDisable(true);
-   		else
-   			treeMenuCxtDel.setDisable(false);
-   			
+ 			
 	}
 
 
@@ -210,30 +212,40 @@ public class ControllerInspector {
     private final class TextFieldTreeCellImpl extends TreeCell<String> {
     	 
         private TextField textField;
-        private ContextMenu addMenu = new ContextMenu();
+        private ContextMenu contextMenu = new ContextMenu();
 
         public TextFieldTreeCellImpl() {
-        	MenuItem addMenuItem = new MenuItem("Add");       	
-            addMenu.getItems().add(addMenuItem);
-            MenuItem delMenuItem = new MenuItem("Remove");
-            addMenu.getItems().add(delMenuItem);
+           	MenuItem treeMenuCxtAdd = new MenuItem("Add Item");
+           	MenuItem treeMenuCxtDel = new MenuItem("Remove Item");
+           	contextMenu.getItems().add(treeMenuCxtAdd);
+           	contextMenu.getItems().add(treeMenuCxtDel);
             
-            addMenuItem.setOnAction(new EventHandler() {
-                public void handle(Event t) {
-                	System.out.println(t);
-                	
+           	treeMenuCxtAdd.setOnAction(new EventHandler<ActionEvent>() {
+           	    public void handle(ActionEvent e) {
+           	    	label = utilsTools.getDepth(depth+1);
+           	        System.out.println("Add Item->Depth:"+depth+" Label:"+label);
                 	nodeTree = (Nodes)getTreeItem();
                 	depth = nodeTree.getDepth()+1;
-
-            		if (depth == Main.NODE_TYPE_ROOT) label = "Root";
-            		if (depth == Main.NODE_TYPE_PROJECT) label = "Project";
-            		if (depth == Main.NODE_TYPE_ENV) label = "Env";
-            		if (depth == Main.NODE_TYPE_DOCBASE) label = "Docbase";
             		
                     Nodes newItem = new Nodes(label, depth);
                     nodeTree.getChildren().add(newItem);
-                }
-            });
+           	    }
+           	});
+           	treeMenuCxtDel.setOnAction(new EventHandler<ActionEvent>() {
+           	    public void handle(ActionEvent e) {
+           	    	nodeTree = (Nodes)getTreeItem();
+           	    	boolean remove = nodeTree.getParent().getChildren().remove(nodeTree);
+           	        System.out.println("Remove Item->Depth:"+depth+" Label:"+utilsTools.getDepth(depth));
+           	    	System.out.println(nodeTree.toString());
+           	    }
+           	});
+           	contextMenu.setOnShown(new EventHandler<WindowEvent>() {
+           	    public void handle(WindowEvent e) {
+           	    	treeMenuCxtAdd.setText("Add "+utilsTools.getDepth(depth+1));
+           	    	treeMenuCxtDel.setText("Remove "+utilsTools.getDepth(depth));
+//           	        System.out.println("shown");
+           	    }
+           	});
         }
 
         
@@ -275,7 +287,7 @@ public class ControllerInspector {
                 } else {
                     setText(getString());
                     setGraphic(getTreeItem().getGraphic());
-                    setContextMenu(addMenu);
+                    setContextMenu(contextMenu);
                     /*
                     if ( getTreeItem().getParent()!= null)
                     {
